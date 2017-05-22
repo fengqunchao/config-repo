@@ -14,13 +14,49 @@
 # ===================================================================
 
 eureka:
-    instance:
-        prefer-ip-address: true
     client:
+        enabled: true
+        healthcheck:
+            enabled: true
+        fetch-registry: true
+        register-with-eureka: true
+        instance-info-replication-interval-seconds: 10
+        registry-fetch-interval-seconds: 10
         service-url:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+    instance:
+        prefer-ip-address: true
+        appname: stargazerService
+        instanceId: stargazerService:${spring.application.instance-id:${random.value}}
+        lease-renewal-interval-in-seconds: 5
+        lease-expiration-duration-in-seconds: 10
+        status-page-url-path: ${management.context-path}/info
+        health-check-url-path: ${management.context-path}/health
+        metadata-map:
+            profile: ${spring.profiles.active}
+            version: ${info.project.version}
+ribbon:
+    eureka:
+        enabled: true
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 10000
 
+management:
+    security:
+        roles: ADMIN
+    context-path: /management
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
 spring:
+    application:
+      name: stargazerService
     profiles:
         active: dev
         include: swagger
@@ -31,6 +67,7 @@ spring:
             enabled: false # we use gulp + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
+        serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/stargazerService?useUnicode=true&characterEncoding=utf8&useSSL=false
@@ -55,6 +92,12 @@ spring:
             hibernate.cache.hazelcast.instance_name: stargazerService
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true
+        open-in-view: false
+        hibernate:
+            ddl-auto: none
+            naming:
+                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     mail:
         host: localhost
         port: 25
@@ -62,8 +105,13 @@ spring:
         password:
     messages:
         cache-seconds: 1
+        basename: i18n/messages
+    mvc:
+        favicon:
+            enabled: false
     thymeleaf:
         cache: false
+        mode: XHTML
     zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
         base-url: http://localhost:9411
         enabled: false
@@ -76,7 +124,7 @@ liquibase:
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
-# keytool -genkey -alias service -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias stargazerService -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
 # https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
@@ -89,10 +137,17 @@ liquibase:
 #        key-store: keystore.p12
 #        key-store-password: <your-password>
 #        keyStoreType: PKCS12
-#        keyAlias: service
+#        keyAlias: stargazerService
 # ===================================================================
 server:
     port: 8001
+    session:
+        cookie:
+            http-only: true
+
+security:
+    basic:
+        enabled: false
 
 # ===================================================================
 # JHipster specific properties
@@ -101,6 +156,23 @@ server:
 # ===================================================================
 
 jhipster:
+    swagger:
+        default-include-pattern: /api/.*
+        title: stargazerService API
+        description: stargazerService API documentation
+        version: 0.0.1
+        terms-of-service-url:
+        contact-name:
+        contact-url:
+        contact-email:
+        license:
+        license-url:
+    ribbon:
+        display-on-active-profiles: dev
+    async:
+        core-pool-size: 2
+        max-pool-size: 50
+        queue-capacity: 10000
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
     cache: # Cache configuration
