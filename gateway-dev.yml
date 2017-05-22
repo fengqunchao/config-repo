@@ -117,7 +117,7 @@ jhipster:
         rate-limiting: # Read the documentation in the GatewayConfiguration class before enabling.
             enabled: false
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-            app1: /api,/v2/api-docs # recommended dev configuration
+            app1: /api,/v2/api-docs,/org # recommended dev configuration
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
     cache: # Cache configuration
