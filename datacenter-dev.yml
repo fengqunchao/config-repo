@@ -14,16 +14,6 @@
 # ===================================================================
 
 eureka:
-    client:
-        enabled: true
-        healthcheck:
-            enabled: true
-        fetch-registry: true
-        register-with-eureka: true
-        instance-info-replication-interval-seconds: 10
-        registry-fetch-interval-seconds: 10
-        service-url:
-            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
     instance:
         prefer-ip-address: true
         appname: datacenter
@@ -35,17 +25,20 @@ eureka:
         metadata-map:
             profile: ${spring.profiles.active}
             version: ${info.project.version}
+    client:
+        service-url:
+            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+        enabled: true
+        healthcheck:
+            enabled: true
+        fetch-registry: true
+        register-with-eureka: true
+        instance-info-replication-interval-seconds: 10
+        registry-fetch-interval-seconds: 10
+
 ribbon:
     eureka:
         enabled: true
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-#hystrix:
-#    command:
-#        default:
-#            execution:
-#                isolation:
-#                    thread:
-#                        timeoutInMilliseconds: 10000
 
 management:
     security:
@@ -54,9 +47,10 @@ management:
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
+
 spring:
     application:
-      name: datacenter
+        name: datacenter
     profiles:
         active: dev
         include: swagger
@@ -98,6 +92,7 @@ spring:
             naming:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
     mail:
         host: localhost
         port: 25
@@ -119,8 +114,18 @@ spring:
             discovery:
                 enabled: true
 
-#liquibase:
-#    contexts: dev
+liquibase:
+    contexts: dev
+
+security:
+    basic:
+        enabled: false
+
+server:
+    port: 8001
+    session:
+        cookie:
+            http-only: true
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
@@ -139,15 +144,6 @@ spring:
 #        keyStoreType: PKCS12
 #        keyAlias: datacenter
 # ===================================================================
-server:
-    port: 8001
-    session:
-        cookie:
-            http-only: true
-
-security:
-    basic:
-        enabled: false
 
 # ===================================================================
 # JHipster specific properties
@@ -156,19 +152,6 @@ security:
 # ===================================================================
 
 jhipster:
-    swagger:
-        default-include-pattern: /api/.*
-        title: datacenter API
-        description: datacenter API documentation
-        version: 0.0.1
-        terms-of-service-url:
-        contact-name:
-        contact-url:
-        contact-email:
-        license:
-        license-url:
-    ribbon:
-        display-on-active-profiles: dev
     async:
         core-pool-size: 2
         max-pool-size: 50
@@ -219,6 +202,20 @@ jhipster:
         spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
+
+    swagger:
+        default-include-pattern: /api/.*
+        title: datacenter API
+        description: datacenter API documentation
+        version: 0.0.1
+        terms-of-service-url:
+        contact-name:
+        contact-url:
+        contact-email:
+        license:
+        license-url:
+    ribbon:
+        display-on-active-profiles: dev
 
 # ===================================================================
 # Application specific properties
