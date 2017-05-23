@@ -136,7 +136,7 @@ spring:
 #        keyAlias: datacenter
 # ===================================================================
 server:
-    port: 8001
+    port: 8002
     session:
         cookie:
             http-only: true
