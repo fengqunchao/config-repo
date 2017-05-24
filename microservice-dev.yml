@@ -35,6 +35,10 @@ eureka:
         metadata-map:
             profile: ${spring.profiles.active}
             version: ${info.project.version}
+            
+ribbon:
+    eureka:
+        enabled: true            
 
 spring:
     profiles:
