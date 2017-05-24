@@ -14,16 +14,6 @@
 # ===================================================================
 
 eureka:
-    client:
-        enabled: true
-        healthcheck:
-            enabled: true
-        fetch-registry: true
-        register-with-eureka: true
-        instance-info-replication-interval-seconds: 10
-        registry-fetch-interval-seconds: 10
-        service-url:
-            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/	
     instance:
         prefer-ip-address: true
         appname: datacenter
@@ -35,26 +25,29 @@ eureka:
         metadata-map:
             profile: ${spring.profiles.active}
             version: ${info.project.version}
-
-
-ribbon:
-    eureka:
+    client:
         enabled: true
-
+        healthcheck:
+            enabled: true
+        fetch-registry: true
+        register-with-eureka: true
+        instance-info-replication-interval-seconds: 10
+        registry-fetch-interval-seconds: 10
+        service-url:
+            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+            
 management:
     security:
         roles: ADMIN
     context-path: /management
     health:
         mail:
-            enabled: false
+            enabled: false # When using the MailService, configure an SMTP server and set this to true            
 
 spring:
-    application:
-        name: datacenter
-    profiles:
-        active: dev
-        include: swagger
+#    profiles:
+#        active: dev
+#        include: swagger
     devtools:
         restart:
             enabled: true
@@ -62,7 +55,6 @@ spring:
             enabled: false # we use gulp + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
-        serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/datacenter?useUnicode=true&characterEncoding=utf8&useSSL=false
@@ -87,12 +79,6 @@ spring:
             hibernate.cache.hazelcast.instance_name: datacenter
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true
-        open-in-view: false
-        hibernate:
-            ddl-auto: none
-            naming:
-                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     mail:
         host: localhost
         port: 25
@@ -100,13 +86,8 @@ spring:
         password:
     messages:
         cache-seconds: 1
-        basename: i18n/messages
-    mvc:
-        favicon:
-            enabled: false
     thymeleaf:
         cache: false
-        mode: XHTML
     zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
         base-url: http://localhost:9411
         enabled: false
@@ -114,9 +95,8 @@ spring:
             discovery:
                 enabled: true
 
-
-#liquibase:
-#    contexts: dev
+liquibase:
+    contexts: dev
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
@@ -136,15 +116,7 @@ spring:
 #        keyAlias: datacenter
 # ===================================================================
 server:
-    port: 8002
-    session:
-        cookie:
-            http-only: true
-    
-
-security:
-    basic:
-        enabled: false
+    port: 8003
 
 # ===================================================================
 # JHipster specific properties
@@ -153,37 +125,20 @@ security:
 # ===================================================================
 
 jhipster:
-    swagger:
-        default-include-pattern: /api/.*
-        title: datacenter API
-        description: datacenter API documentation
-        version: 0.0.1
-        terms-of-service-url:
-        contact-name:
-        contact-url:
-        contact-email:
-        license:
-        license-url:
-    ribbon:
-        display-on-active-profiles: dev
-    async:
-        core-pool-size: 2
-        max-pool-size: 50
-        queue-capacity: 10000
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
-    cache: # Cache configuration
-        hazelcast: # Hazelcast distributed cache
-            time-to-live-seconds: 3600
-            backup-count: 1
+#    cache: # Cache configuration
+#        hazelcast: # Hazelcast distributed cache
+#            time-to-live-seconds: 3600
+#            backup-count: 1
     # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
-    cors:
-        allowed-origins: "*"
-        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
-        allowed-headers: "*"
-        exposed-headers:
-        allow-credentials: true
-        max-age: 1800
+#    cors:
+#        allowed-origins: "*"
+#        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+#        allowed-headers: "*"
+#        exposed-headers:
+#        allow-credentials: true
+#        max-age: 1800
     security:
         authentication:
             jwt:
@@ -191,23 +146,22 @@ jhipster:
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
-    mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: datacenter@localhost
-        base-url: http://127.0.0.1:8002
-
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: datacenter
-        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
-            enabled: false
-            endpoint: /prometheusMetrics
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: false
-            report-frequency: 60 # in seconds
+#    mail: # specific JHipster mail property, for standard properties see MailProperties
+#        from: datacenter@localhost
+#        base-url: http://127.0.0.1:8003
+#    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+#        jmx.enabled: true
+#        graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
+#            enabled: false
+#            host: localhost
+#            port: 2003
+#            prefix: datacenter
+#        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
+#            enabled: false
+#            endpoint: /prometheusMetrics
+#       logs: # Reports Dropwizard metrics in the logs
+#           enabled: false
+#            report-frequency: 60 # in seconds
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
@@ -217,6 +171,17 @@ jhipster:
         spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
+#    swagger:
+#        default-include-pattern: /api/.*
+#        title: datacenter API
+#        description: datacenter API documentation
+#        version: 0.0.1
+#        terms-of-service-url:
+#        contact-name:
+#        contact-url:
+#        contact-email:
+#        license:
+#        license-url:            
 
 # ===================================================================
 # Application specific properties
