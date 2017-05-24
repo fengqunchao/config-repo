@@ -35,11 +35,25 @@ eureka:
         metadata-map:
             profile: ${spring.profiles.active}
             version: ${info.project.version}
-            
 ribbon:
     eureka:
-        enabled: true            
+        enabled: true
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 10000
 
+management:
+    security:
+        roles: ADMIN
+    context-path: /management
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
 spring:
     application:
         name: microservice
@@ -53,6 +67,7 @@ spring:
             enabled: false # we use gulp + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
+#        serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/microservice?useUnicode=true&characterEncoding=utf8&useSSL=false
@@ -77,6 +92,12 @@ spring:
             hibernate.cache.hazelcast.instance_name: microservice
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true
+        open-in-view: false
+        hibernate:
+            ddl-auto: none
+            naming:
+                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     mail:
         host: localhost
         port: 25
@@ -84,9 +105,10 @@ spring:
         password:
     messages:
         cache-seconds: 1
+        basename: i18n/messages
     mvc:
         favicon:
-            enabled: false        
+            enabled: false
     thymeleaf:
         cache: false
         mode: XHTML
@@ -97,8 +119,8 @@ spring:
             discovery:
                 enabled: true
 
-liquibase:
-    contexts: dev
+#liquibase:
+#    contexts: dev
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
@@ -118,7 +140,14 @@ liquibase:
 #        keyAlias: microservice
 # ===================================================================
 server:
-    port: 8003
+    port: 8001
+    session:
+        cookie:
+            http-only: true
+
+security:
+    basic:
+        enabled: false
 
 # ===================================================================
 # JHipster specific properties
@@ -143,7 +172,7 @@ jhipster:
         contact-url:
         contact-email:
         license:
-        license-url:        
+        license-url:
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
     cache: # Cache configuration
@@ -167,7 +196,7 @@ jhipster:
                 token-validity-in-seconds-for-remember-me: 2592000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: microservice@localhost
-        base-url: http://127.0.0.1:8003
+        base-url: http://127.0.0.1:8001
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
