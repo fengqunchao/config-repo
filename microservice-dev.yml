@@ -35,9 +35,9 @@ eureka:
         metadata-map:
             profile: ${spring.profiles.active}
             version: ${info.project.version}
-ribbon:
-    eureka:
-        enabled: true
+#ribbon:
+#    eureka:
+#        enabled: true
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 #hystrix:
 #    command:
@@ -47,16 +47,16 @@ ribbon:
 #                    thread:
 #                        timeoutInMilliseconds: 10000
 
-management:
-    security:
-        roles: ADMIN
-    context-path: /management
-    health:
-        mail:
-            enabled: false # When using the MailService, configure an SMTP server and set this to true
+#management:
+#    security:
+#        roles: ADMIN
+#    context-path: /management
+#    health:
+#        mail:
+#            enabled: false # When using the MailService, configure an SMTP server and set this to true
 spring:
-    application:
-        name: microservice
+#    application:
+#        name: microservice
     profiles:
         active: dev
         include: swagger
