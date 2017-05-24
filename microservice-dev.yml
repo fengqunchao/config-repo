@@ -41,6 +41,8 @@ ribbon:
         enabled: true            
 
 spring:
+    application:
+        name: microservice
     profiles:
         active: dev
         include: swagger
