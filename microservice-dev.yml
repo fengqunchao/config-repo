@@ -35,9 +35,9 @@ eureka:
         metadata-map:
             profile: ${spring.profiles.active}
             version: ${info.project.version}
-#ribbon:
-#    eureka:
-#        enabled: true
+ribbon:
+    eureka:
+        enabled: true
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 #hystrix:
 #    command:
