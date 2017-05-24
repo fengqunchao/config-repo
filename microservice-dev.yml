@@ -84,8 +84,12 @@ spring:
         password:
     messages:
         cache-seconds: 1
+    mvc:
+        favicon:
+            enabled: false        
     thymeleaf:
         cache: false
+        mode: XHTML
     zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
         base-url: http://localhost:9411
         enabled: false
@@ -123,6 +127,23 @@ server:
 # ===================================================================
 
 jhipster:
+    ribbon:
+        display-on-active-profiles: dev
+    async:
+        core-pool-size: 2
+        max-pool-size: 50
+        queue-capacity: 10000
+    swagger:
+        default-include-pattern: /api/.*
+        title: microservice API
+        description: microservice API documentation
+        version: 0.0.1
+        terms-of-service-url:
+        contact-name:
+        contact-url:
+        contact-email:
+        license:
+        license-url:        
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
     cache: # Cache configuration
@@ -140,7 +161,7 @@ jhipster:
     security:
         authentication:
             jwt:
-                secret: my-secret-token-to-change-in-production
+                secret: 737be45c44160d23b37f6fff656ea33138a08276
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
