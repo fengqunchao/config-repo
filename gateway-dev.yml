@@ -39,7 +39,7 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://192.168.199.250:3306/gateway?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
-        password: szgx2017
+        password: 123qwe
         hikari:
             data-source-properties:
                 cachePrepStmts: true
